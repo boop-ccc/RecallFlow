@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>RecallFlow</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>RecallFlow</h1>
+      <p>恢复你的工作上下文</p>
+    </header>
+
+    <section class="card">
+      <h2>采集当前页面</h2>
+      <button id="captureButton">
+        Capture this page
+      </button>
+      <div id="captureStatus" class="status"></div>
+    </section>
+
+    <section class="card">
+      <h2>继续工作</h2>
+      <textarea
+        id="queryInput"
+        rows="4"
+        placeholder="例如：我之前研究 Agent Memory 的时候看了什么？"
+      ></textarea>
+
+      <button id="askButton">
+        Ask RecallFlow
+      </button>
+
+      <button id="newThreadButton" class="secondary">
+        New thread
+      </button>
+    </section>
+
+    <section class="card result-card">
+      <div class="meta">
+        <span id="routeValue">Route: -</span>
+        <span id="verificationValue">Verification: -</span>
+      </div>
+
+      <pre id="answerOutput">等待查询…</pre>
+    </section>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>

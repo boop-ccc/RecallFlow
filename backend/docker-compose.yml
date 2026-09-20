@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: recallflow
+      POSTGRES_USER: recallflow
+      POSTGRES_PASSWORD: recallflow
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U recallflow -d recallflow"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - recallflow_postgres:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://recallflow:recallflow@postgres:5432/recallflow
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-qwen/qwen3.8-27b}
+      HF_TOKEN: ${HF_TOKEN:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - recallflow_hf_cache:/root/.cache/huggingface
+
+volumes:
+  recallflow_postgres:
+  recallflow_hf_cache:
