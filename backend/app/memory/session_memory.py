@@ -2,7 +2,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.repositories.memory_repository import MemoryRepository
 from app.schemas.memory import EvidenceItem, SessionEvidence
+from datetime import timezone
+from datetime import timezone, timedelta
 
+CHINA_TZ = timezone(timedelta(hours=8))
+
+
+def format_time(dt):
+    # 数据库里的无时区时间按 UTC 处理
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+
+    # 转北京时间，显示为 24 小时制
+    return dt.astimezone(CHINA_TZ).strftime("%Y-%m-%d %H:%M")
 
 class SessionMemoryService:
     """
@@ -68,7 +80,7 @@ class SessionMemoryService:
 
         lines = [
             f"Session ID: {context.session_id}",
-            f"Time: {context.started_at} -> {context.ended_at}",
+            f"Time: {format_time(context.started_at)} -> {format_time(context.ended_at)}",
             "",
             "Evidence:",
         ]
@@ -84,7 +96,7 @@ class SessionMemoryService:
 [{index}]
 Title: {item.title or "Unknown"}
 Source: {item.locator}
-Observed At: {item.observed_at}
+Observed At: {format_time(item.observed_at)}
 Content: {content}
 """.strip()
             )

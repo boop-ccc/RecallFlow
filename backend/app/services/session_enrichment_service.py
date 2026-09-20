@@ -29,6 +29,8 @@ Rules:
 2. keywords may contain English technical terms.
 3. open_tasks must only contain tasks clearly supported by evidence.
 4. If there is no evidence of unfinished tasks, return [].
+5. keywords must contain no more than 8 items.
+6. open_tasks must contain no more than 5 items.
 """
 
 
